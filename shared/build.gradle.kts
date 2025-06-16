@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -35,6 +36,7 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(project.dependencies.platform(libs.koin.bom))
                 implementation(libs.koin.core)
             }
         }
@@ -67,7 +69,17 @@ android {
     compileSdk = 35
     defaultConfig {
         minSdk = 29
+        val props = Properties()
+        props.load(project.rootProject.file("local.properties").inputStream())
+        val marvelPublicKey = props.getProperty("MARVEL_PUBLIC_KEY") ?: ""
+        val marvelPrivateKey = props.getProperty("MARVEL_PRIVATE_KEY") ?: ""
+        // Inyectar como campos de BuildConfig
+        buildConfigField("String", "MARVEL_PUBLIC_KEY", "\"$marvelPublicKey\"")
+        buildConfigField("String", "MARVEL_PRIVATE_KEY", "\"$marvelPrivateKey\"")
     }
+
+    buildFeatures { buildConfig = true }  // asegurar generación de BuildConfig
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

@@ -9,7 +9,7 @@ import io.ktor.client.request.parameter
 import io.ktor.http.HttpHeaders
 
 class MarvelCharactersClient(
-    private val client: HttpClient = getHttpClient()
+    private val client: HttpClient
 ) {
     suspend fun getAllCharacters(
         timestamp: Long, md5: String, publicKey: String

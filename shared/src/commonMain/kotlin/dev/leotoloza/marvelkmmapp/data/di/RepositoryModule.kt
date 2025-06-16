@@ -6,15 +6,11 @@ import dev.leotoloza.marvelkmmapp.domain.repository.CharacterRepository
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-val appModule: Module = module {
+val repositoryModule: Module = module {
 
     // Cliente de red
-    single {
-        MarvelCharactersClient()
-    }
+    single { MarvelCharactersClient(get()) }
 
     // Repositorio
-    single<CharacterRepository> {
-        CharacterRepositoryImpl(get())
-    }
+    single<CharacterRepository> { CharacterRepositoryImpl(get()) }
 }

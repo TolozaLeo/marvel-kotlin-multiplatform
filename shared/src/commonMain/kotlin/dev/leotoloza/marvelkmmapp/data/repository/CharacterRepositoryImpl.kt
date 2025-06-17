@@ -22,7 +22,27 @@ class CharacterRepositoryImpl(
         val response = api.getAllCharacters(
             timestamp = timestamp, md5 = hash, publicKey = publicKey
         )
-        return response.characters.list.map { it.toDomain() }
+        val charactersList = response.characters.list.map { it.toDomain() }
+        return sort(charactersList)
+    }
+
+    private fun sort(characters: List<Character>): List<Character> {
+        return characters.sortedWith(CharacterComparator())
+    }
+
+    private class CharacterComparator : Comparator<Character> {
+        override fun compare(a: Character, b: Character): Int {
+            if (a.description.isEmpty() && b.description.isEmpty()) {
+                return b.id.compareTo(a.id)
+            }
+            if (a.description.isNotEmpty() && b.description.isNotEmpty()) {
+                return a.id.compareTo(b.id)
+            }
+            if (a.description.isNotEmpty() && b.description.isEmpty()) {
+                return -1
+            }
+            return 1
+        }
     }
 
     private fun CharacterResult.toDomain(): Character {

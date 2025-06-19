@@ -1,4 +1,4 @@
-package dev.leotoloza.marvelkmmapp.domain.network
+package dev.leotoloza.marvelkmmapp.data.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin

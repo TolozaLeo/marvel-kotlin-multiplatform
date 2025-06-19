@@ -1,8 +1,8 @@
 package dev.leotoloza.marvelkmmapp.data.repository
 
+import dev.leotoloza.marvelkmmapp.data.local.dao.CharacterDao
 import dev.leotoloza.marvelkmmapp.domain.model.Character
-import dev.leotoloza.marvelkmmapp.domain.model.CharacterResult
-import dev.leotoloza.marvelkmmapp.domain.network.MarvelCharactersClient
+import dev.leotoloza.marvelkmmapp.data.network.MarvelCharactersClient
 import dev.leotoloza.marvelkmmapp.domain.repository.CharacterRepository
 import dev.leotoloza.marvelkmmapp.util.getMarvelPrivateKey
 import dev.leotoloza.marvelkmmapp.util.getMarvelPublicKey
@@ -10,20 +10,34 @@ import dev.leotoloza.marvelkmmapp.util.md5
 import io.ktor.util.date.getTimeMillis
 
 class CharacterRepositoryImpl(
-    private val api: MarvelCharactersClient
+    private val api: MarvelCharactersClient,
+    private val characterDao: CharacterDao
 ) : CharacterRepository {
 
     override suspend fun getCharacters(): List<Character> {
-        val timestamp = getTimeMillis()
-        val publicKey = getMarvelPublicKey()
-        val privateKey = getMarvelPrivateKey()
-        val hash = ("$timestamp$privateKey$publicKey").md5()
+        return try {
+            val timestamp = getTimeMillis()
+            val publicKey = getMarvelPublicKey()
+            val privateKey = getMarvelPrivateKey()
+            val hash = ("$timestamp$privateKey$publicKey").md5()
 
-        val response = api.getAllCharacters(
-            timestamp = timestamp, md5 = hash, publicKey = publicKey
-        )
-        val charactersList = response.characters.list.map { it.toDomain() }
-        return sort(charactersList)
+            val apiResponse =
+                api.getAllCharacters(timestamp = timestamp, md5 = hash, publicKey = publicKey)
+            val charactersList = apiResponse.characters.list.map { characterResult ->
+                Character(
+                    id = characterResult.id,
+                    name = characterResult.name,
+                    description = characterResult.description,
+                    thumbnailUrl = characterResult.thumbnail.url
+                )
+            }
+
+            charactersList.forEach { characterDao.insertCharacter(it) }
+            sort(charactersList)
+        } catch (e: Exception) {
+            val charactersList = characterDao.getAllCharacters()
+            return sort(charactersList)
+        }
     }
 
     private fun sort(characters: List<Character>): List<Character> {
@@ -43,11 +57,5 @@ class CharacterRepositoryImpl(
             }
             return 1
         }
-    }
-
-    private fun CharacterResult.toDomain(): Character {
-        return Character(
-            id = id, name = name, description = description, thumbnailUrl = thumbnail.url
-        )
     }
 }

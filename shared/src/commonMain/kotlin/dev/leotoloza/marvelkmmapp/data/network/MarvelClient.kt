@@ -1,6 +1,6 @@
-package dev.leotoloza.marvelkmmapp.domain.network
+package dev.leotoloza.marvelkmmapp.data.network
 
-import dev.leotoloza.marvelkmmapp.domain.model.CharactersResponse
+import dev.leotoloza.marvelkmmapp.data.network.model.CharactersResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

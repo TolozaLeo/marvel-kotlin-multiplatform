@@ -1,6 +1,6 @@
 package dev.leotoloza.marvelkmmapp.data.di
 
-import dev.leotoloza.marvelkmmapp.domain.network.getHttpClient
+import dev.leotoloza.marvelkmmapp.data.network.getHttpClient
 import io.ktor.client.HttpClient
 import org.koin.dsl.module
 

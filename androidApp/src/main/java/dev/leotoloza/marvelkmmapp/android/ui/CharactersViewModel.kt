@@ -18,7 +18,7 @@ class CharactersViewModel(
         getCharacters()
     }
 
-    fun getCharacters() {
+    private fun getCharacters() {
         viewModelScope.launch {
             _uiState.value = CharactersUiState.Loading
             runCatching {

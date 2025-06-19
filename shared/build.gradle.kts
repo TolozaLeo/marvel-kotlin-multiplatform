@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.sqldelightPlugin)
 }
 
 kotlin {
@@ -38,12 +39,14 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(project.dependencies.platform(libs.koin.bom))
                 implementation(libs.koin.core)
+                implementation(libs.sqldelight.coroutines)
             }
         }
 
         val androidMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.sqldelight.android)
             }
         }
 
@@ -55,6 +58,7 @@ kotlin {
             dependsOn(commonMain)
             dependencies{
                 implementation(libs.ktor.client.darwin)
+                implementation(libs.sqldelight.native)
             }
         }
 
@@ -83,5 +87,13 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+sqldelight {
+    databases {
+        create("MarvelDatabase") {// Nombre de la base de datos
+            packageName.set("dev.leotoloza.marvelkmmapp.chache") // Paquete donde se creará la base de datos
+        }
     }
 }

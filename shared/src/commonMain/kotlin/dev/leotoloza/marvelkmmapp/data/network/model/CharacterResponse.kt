@@ -1,4 +1,4 @@
-package dev.leotoloza.marvelkmmapp.domain.model
+package dev.leotoloza.marvelkmmapp.data.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

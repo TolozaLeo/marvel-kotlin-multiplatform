@@ -1,0 +1,13 @@
+CREATE TABLE CharacterEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    thumbnailUrl TEXT
+);
+
+selectAllCharacters:
+SELECT * FROM CharacterEntity;
+
+insertCharacter:
+INSERT OR IGNORE INTO CharacterEntity(id, name, description, thumbnailUrl)
+VALUES (?, ?, ?, ?);

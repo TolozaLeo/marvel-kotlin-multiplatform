@@ -1,6 +1,6 @@
 package dev.leotoloza.marvelkmmapp.data.repository
 
-import dev.leotoloza.marvelkmmapp.data.local.dao.CharacterDao
+import dev.leotoloza.marvelkmmapp.data.local.CharacterLocalDataSource
 import dev.leotoloza.marvelkmmapp.domain.model.Character
 import dev.leotoloza.marvelkmmapp.data.network.MarvelCharactersClient
 import dev.leotoloza.marvelkmmapp.domain.repository.CharacterRepository
@@ -11,11 +11,10 @@ import io.ktor.util.date.getTimeMillis
 
 class CharacterRepositoryImpl(
     private val api: MarvelCharactersClient,
-    private val characterDao: CharacterDao
+    private val local: CharacterLocalDataSource
 ) : CharacterRepository {
 
     override suspend fun getCharacters(): List<Character> {
-        return try {
             val timestamp = getTimeMillis()
             val publicKey = getMarvelPublicKey()
             val privateKey = getMarvelPrivateKey()
@@ -32,12 +31,12 @@ class CharacterRepositoryImpl(
                 )
             }
 
-            charactersList.forEach { characterDao.insertCharacter(it) }
-            sort(charactersList)
-        } catch (e: Exception) {
-            val charactersList = characterDao.getAllCharacters()
+            charactersList.forEach { local.insertCharacter(it) }
             return sort(charactersList)
-        }
+    }
+
+    override suspend fun getCachedCharacters(): List<Character> {
+        return local.getAllCharacters()
     }
 
     private fun sort(characters: List<Character>): List<Character> {

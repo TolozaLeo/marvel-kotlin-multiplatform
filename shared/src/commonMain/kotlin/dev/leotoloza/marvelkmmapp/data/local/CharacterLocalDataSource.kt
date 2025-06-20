@@ -1,9 +1,9 @@
-package dev.leotoloza.marvelkmmapp.data.local.dao
+package dev.leotoloza.marvelkmmapp.data.local
 
-import dev.leotoloza.marvelkmmapp.chache.MarvelDatabase
+import dev.leotoloza.marvelkmmapp.cache.MarvelDatabase
 import dev.leotoloza.marvelkmmapp.domain.model.Character
 
-class CharacterDao(database: MarvelDatabase) {
+class CharacterLocalDataSource(database: MarvelDatabase) {
     private val queries = database.marvelDatabaseQueries  // Objeto de consultas generado
 
     fun insertCharacter(character: Character) {

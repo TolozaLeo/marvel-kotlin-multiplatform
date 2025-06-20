@@ -1,9 +1,9 @@
 package dev.leotoloza.marvelkmmapp.android.di
 
 import app.cash.sqldelight.db.SqlDriver
-import dev.leotoloza.marvelkmmapp.chache.MarvelDatabase
+import dev.leotoloza.marvelkmmapp.cache.MarvelDatabase
 import dev.leotoloza.marvelkmmapp.data.local.DatabaseDriverFactory
-import dev.leotoloza.marvelkmmapp.data.local.dao.CharacterDao
+import dev.leotoloza.marvelkmmapp.data.local.CharacterLocalDataSource
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -23,6 +23,6 @@ val localDatabaseModule = module {
 
     // 4) DAO
     single {
-        CharacterDao( get() )
+        CharacterLocalDataSource( get() )
     }
 }

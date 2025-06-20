@@ -93,7 +93,7 @@ android {
 sqldelight {
     databases {
         create("MarvelDatabase") {// Nombre de la base de datos
-            packageName.set("dev.leotoloza.marvelkmmapp.chache") // Paquete donde se creará la base de datos
+            packageName.set("dev.leotoloza.marvelkmmapp.cache") // Paquete donde se creará la base de datos
         }
     }
 }

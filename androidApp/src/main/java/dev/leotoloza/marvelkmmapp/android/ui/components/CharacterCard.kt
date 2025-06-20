@@ -46,12 +46,13 @@ fun CharacterCard(
             ){
                 Text(
                     text = character.name,
-                    color = Color(0xFF333366),
+                    color = Color.Black,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = character.description.ifBlank { "No description available." },
+                    color = Color.DarkGray,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis
